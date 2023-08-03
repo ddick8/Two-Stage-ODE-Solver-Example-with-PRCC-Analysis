@@ -69,5 +69,5 @@ end
 save Model_LHS.mat;
 
 % Calculate PRCC (Partial Rank Correlation Coefficient)
-[prcc sign sign_label]=PRCC(LHSmatrix,V_lhs,1:length(time_points),PRCC_var,0.05);
+[prcc sign sign_label]=PRCC_II(LHSmatrix,V_lhs,1:length(time_points),PRCC_var,0.05);
 
