@@ -48,6 +48,11 @@ var_label = {'T','I','V'};
 
 % Constructing the LHS matrix with generated samples for beta, q, and control time
 LHSmatrix  = [beta_LHS q_LHS controlTime_LHS];
+
+% Preallocate matrices for T_lhs, I_lhs, and V_lhs
+T_lhs = zeros(length(time_points), runs);
+I_lhs = zeros(length(time_points), runs);
+V_lhs = zeros(length(time_points), runs);
  
 % Iterating over the number of runs and solving the model for each set of parameters
 for x=1:runs 
