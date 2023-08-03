@@ -1,4 +1,12 @@
-function [T,Y] = restartODE()
+function [T,Y] = restartODE(s)
+parameters.Original.beta = 0.5;
+parameters.Original.q = 1;
+
+parameters.Control.beta = 0.1;
+parameters.Control.q = 0.8;
+
+parameters.ControlTime = 10;
+    
     % Define the parameters for the HIV In Vitro model, encapsulated in a struct 'p'
     p.beta = 8e-4; % Infection rate of target cells by the virus
     p.q = 1; % Proportion of infected cells producing virus
@@ -8,7 +16,12 @@ function [T,Y] = restartODE()
 
     % Define the time span and initial conditions for the first simulation
     tspanEnd = 10;   % The final time for the simulation
-    tspan1 = [0 tspanEnd]; % Initial range for time 
+    tspanStop = parameters.ControlTime; %Time to introduce controls if event condition not met
+
+    % Check if the stop time is before the end time, throw error otherwise.
+    validate_tstopearly(tspanStop, tspanEnd);
+
+    tspan1 = [0 tspanStop]; % Initial range for time 
     y0 = [100 0 1];  % Initial conditions [T, I, V]
 
     % Set the options for the ODE solver to include the event function
