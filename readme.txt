@@ -9,29 +9,30 @@ The repository contains scripts for the simulation and analysis of the model usi
 This HIV In Vitro model represents the dynamics of the target cells (T), infected cells (I), and free virus (V).
 
 Two main scripts are provided:
-1. A basic script to run the ODE model, introduce control strategies at a specific time point, and visualize the results.
-2. A script to perform a sensitivity analysis of the model's outputs to its parameters using Latin Hypercube Sampling (LHS) and Partial Rank Correlation Coefficients (PRCC).
+1. A basic script (`restartODE.m`) to run the ODE model, introduce control strategies at a specific time point, and visualize the results.
+2. A script (`restartODEwithPRCC.m`) to perform a sensitivity analysis of the model's outputs to its parameters using Latin Hypercube Sampling (LHS) and Partial Rank Correlation Coefficients (PRCC).
+
+## Stopping Conditions
+
+The stopping conditions for the simulation are dictated by the 'stopEvent.m' function and the 'parameters.ControlTime' parameter. If the 'stopEvent' condition isn't satisfied, the simulation continues until it reaches 'ControlTime'. 
+
+Once the ODE solver halts, control measures are implemented by modifying the 'parameters.Control.beta' and 'parameters.Control.q' parameters or modifing the initial conditions.
 
 ## Scripts
 
-### Basic Run Script
+### Basic Run Script:
 
-This script (`run_script.m`) executes the HIV In Vitro model using an ODE solver. The script introduces control strategies at a predetermined point in time (or under certain conditions) and plots the populations of target cells, infectious cells, and free virus over time.
-
-The script utilizes the following functions:
-- `restartODE.m`: Resets the ODE solver with modified parameters.
-- `validate_tstopearly.m`: Validates that the time of control strategy introduction is earlier than the end time of the simulation.
+This script (`restartODE.m`) executes the HIV In Vitro model using an ODE solver. The script introduces control strategies at a predetermined point in time (or under certain conditions) and plots the populations of target cells, infectious cells, and free virus over time.
 
 ### Run with PRCC Script
 
-This script (`run_prcc.m`) runs the HIV In Vitro model, introduces control strategies at a specific point, and carries out a sensitivity analysis on the parameters.
+This script (`restartODEwithPRCC.m`) runs the HIV In Vitro model, introduces control strategies at a specific point, and carries out a sensitivity analysis on the parameters.
 
 The parameters are varied using Latin Hypercube Sampling (LHS), and the outputs at the time points of interest are saved. The script calculates Partial Rank Correlation Coefficients (PRCC) to analyze the sensitivity of the output to the parameters.
 
 ### Other Functions
 
 - `LHS_Call.m`: Generates the Latin Hypercube Sampling matrix. 
-- `restartODE.m`: Resets the differential equation solver with new parameters.
 - `stopEvent.m`: Defines the condition to halt the ODE solver.
 - `HIVInVitrio.m`: Defines the ODEs for the HIV In Vitro model.
 

@@ -104,7 +104,7 @@ for r=1:length(s)
     %% Plots of PRCCs and their p-values
     %subplot(1,2,1),bar(PRCCs(r,:)),Title(c1);
         
-set(0,'DefaultAxesFontSize',25)   
+%set(0,'DefaultAxesFontSize',25)   
 
 
 % %%% PRCC values on the Y-axis
