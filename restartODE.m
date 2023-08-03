@@ -14,7 +14,7 @@ function [T,Y,stoppedTime] = restartODE(parameters)
     tspanEnd = parameters.FinalTime;   % The final time for the simulation
     tspanStop = parameters.ControlTime; % Time to introduce controls if event condition not met
 
-    tspan1 = [0 tspanStop]; % Initial range for time 
+    tspan1 = [0 tspanStop]; % Initial range for time
     y0 = [100 0 1];  % Initial conditions [T, I, V]
 
     % Set the options for the ODE solver to include the event function

@@ -66,30 +66,6 @@ sign=uncorrected_sign;
 sign_label_struct=struct;
 sign_label_struct.uncorrected_sign=uncorrected_sign;
 
-% Loop through time points
-for r=1:length(timePoints)
-    % Find significant PRCCs at the current time point
-    a=find(uncorrected_sign(r,:)<alpha);
-    % Store significant PRCCs
-    sign_label_struct.index{r}=a;
-    sign_label_struct.label{r}=PRCCVar(a);
-    sign_label_struct.value{r}=num2str(prcc(r,a));
-    
-    % Plot PRCCs
-    figure; 
-    b1 = bar(PRCCs(r,:)) ;
-    ylabel('PRCC Values for free virus')
-    xlabel('Parameters')
-    grid
-    ax = gca; % get the current axes
-    ax.FontSize = 12; % set the font size to 12
-
-    set(ax,'XLim',[0.5 length(PRCCVar)+.5])       
-    set(ax,'XTick',1:length(PRCCVar)) 
-    set(ax,'XTickLabel',PRCCVar),      
-    colormap autumn
-end
-
 % Return the structure containing significant PRCCs
 signLabel=sign_label_struct;
 

@@ -11,19 +11,24 @@
 % restarts the differential equation solver with new parameters.
 % David Dick ddick8@uwo.ca (August 3, 2023)
 
-% Setting up the time frame for the simulation
-parameters.FinalTime = 10; % End time for the simulation
-tspan=linspace(0,parameters.FinalTime,100); % Array of time points for the simulation
-midPoint = round(length(tspan)/2); % Calculating the midpoint of the time array
-time_points=[midPoint parameters.FinalTime]; % Time points of interest for analysis
-
-% Defining the sample size
-runs=100; % Number of iterations for the simulation
-
 % Creating control parameters for the model
 parameters.Original = struct('beta', [], 'q', []); % Empty structure for original parameters
 parameters.Control = struct('beta', [], 'q', []); % Empty structure for control parameters
 parameters.ControlTime = []; % Placeholder for control time
+parameters.tspan = []; %Placeholder for tspan
+
+% Setting up the time frame for the simulation
+parameters.FinalTime = 10; % End time for the simulation
+%timeIntervals = 100; % Defining the total number of time intervals for the simulation
+%parameters.tspan=linspace(0,parameters.FinalTime,timeIntervals); % Array of time points for the simulation
+earlyPoint = round(parameters.FinalTime/6); % Calculating an 'early' time point (1/6 of total)
+midPoint = round(parameters.FinalTime/2); % Calculating the midpoint of the time array
+
+% Time points of interest for analysis, including the early point, midpoint, and end point
+timePoints=[earlyPoint midPoint parameters.FinalTime];
+
+% Defining the sample size
+runs=1000; % Number of iterations for the simulation
 
 % Setting control variable parameters
 parameters.Original.beta = 8e-4;
@@ -41,7 +46,7 @@ q_LHS = LHS_Call(1e-4, parameters.Control.q, parameters.Control.q*100, parameter
 controlTime_LHS = LHS_Call(1e-4, parameters.ControlTime, parameters.FinalTime, 0 ,runs,'unif');
 
 % Variable names for PRCC (Partial Rank Correlation Coefficient) analysis
-PRCC_var = {'\beta','q','control t'};
+PRCCVar = {'\beta','q','control t'};
 
 % Labels for compartments in the model
 var_label = {'T','I','V'};
@@ -50,9 +55,12 @@ var_label = {'T','I','V'};
 LHSmatrix  = [beta_LHS q_LHS controlTime_LHS];
 
 % Preallocate matrices for T_lhs, I_lhs, and V_lhs
-T_lhs = zeros(length(time_points), runs);
-I_lhs = zeros(length(time_points), runs);
-V_lhs = zeros(length(time_points), runs);
+T_lhs = zeros(length(timePoints), runs);
+I_lhs = zeros(length(timePoints), runs);
+V_lhs = zeros(length(timePoints), runs);
+
+% Preallocate time points index
+timePointsIndex = zeros(length(timePoints),1);
  
 % Iterating over the number of runs and solving the model for each set of parameters
 for x=1:runs 
@@ -64,15 +72,35 @@ for x=1:runs
 
     A=[t y]; % Combining the time and state vectors
 
-    % Extracting the outputs at the time points of interest [time_points]
-    T_lhs(:,x)=A(time_points,1);
-    I_lhs(:,x)=A(time_points,2);
-    V_lhs(:,x)=A(time_points,3);
+     % Find the index of each time point of intrest  [time_points]
+    for i = 1:length(timePoints)
+    timePointsIndex(i) = find(t > i,1);
+    end
+
+    % Extracting the outputs at the time points of interest
+    T_lhs(:,x)=A(timePointsIndex,1);
+    I_lhs(:,x)=A(timePointsIndex,2);
+    V_lhs(:,x)=A(timePointsIndex,3);
 end
             
 % Save the workspace
 save Model_LHS.mat;
 
 % Calculate PRCC (Partial Rank Correlation Coefficient)
-[prcc sign sign_label]=PRCC_II(LHSmatrix,V_lhs,1:length(time_points),PRCC_var,0.05);
+alpha = 0.05; %Significance level
+
+[prcc, sign, sign_label]=PRCC_II(LHSmatrix,V_lhs,1:length(timePoints),PRCCVar ,alpha);
+
+% Loop through time points
+for r=1:length(timePoints)
+    % Find significant PRCCs at the current time point
+    a=find(sign(r,:)<alpha);
+    % Store significant PRCCs
+    sign_label.index{r}=a;
+    sign_label.label{r}=PRCCVar(a);
+    sign_label.value{r}=num2str(prcc(r,a));
+    
+    % Call the plotting function
+    plotPRCC(prcc(r,:), PRCCVar, timePoints(r))
+end
 
