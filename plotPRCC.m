@@ -1,7 +1,7 @@
-function plotPRCC(PRCCs, PRCCVar, timePoint)
+function plotPRCC(PRCCs, PRCCVar, timePoint, xLabelText)
     figure;
     bar(PRCCs)
-    ylabel('PRCC Values for free virus')
+    ylabel(xLabelText)
     xlabel('Parameters')
     grid
     ax = gca; % get the current axes

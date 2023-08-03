@@ -101,6 +101,6 @@ for r=1:length(timePoints)
     sign_label.value{r}=num2str(prcc(r,a));
     
     % Call the plotting function
-    plotPRCC(prcc(r,:), PRCCVar, timePoints(r))
+    plotPRCC(prcc(r,:), PRCCVar, timePoints(r),'PRCC Values for free virus')
 end
 
