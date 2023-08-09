@@ -1,0 +1,38 @@
+
+
+
+
+% Define original control parameters
+parameters.Original = struct('beta', 8e-4, 'q', 1);
+parameters.Control = struct('beta', 8e-4, 'q', 1);
+parameters.ControlTime = 3;
+parameters.FinalTime = 10;
+
+% Validate if the stop time is before the end time, throw error otherwise.
+validate_tstopearly(parameters.ControlTime, parameters.FinalTime);
+
+% Changed paramter labels
+paramterLabels = {'beta','q'};
+
+% Changed parameter list
+betaChange = [8e-4,8e-8,8e-16,0];
+
+% Preallocate cell array to store parameter sets
+paramSets = cell(1, n);
+
+% Loop to create n parameter sets
+for i = 1:length(betaChange)
+    % Create a new parameter set based on the original, with some variations
+    newParamSet = parameters;
+    newParamSet.Original.beta = parameters.Original.beta;
+    newParamSet.Original.q = parameters.Original.q;
+    newParamSet.Control.beta = betaChange(i); 
+    newParamSet.Control.q = parameters.Control.q;
+    newParamSet.ControlTime = parameters.ControlTime;
+
+    % Store the new parameter set
+    paramSets{i} = newParamSet;
+end
+
+%Plot
+plotParameterChanges(paramSets, paramterLabels);

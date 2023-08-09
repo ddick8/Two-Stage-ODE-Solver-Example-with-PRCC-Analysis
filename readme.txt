@@ -43,6 +43,24 @@ Steps:
 4. Iterative Model Solving: Iterates through the runs, solves the model with new parameters at each iteration using the restartODE function, and extracts the outputs at the time points of interest.
 5. Saving and Analysis: Saves the workspace and calculates PRCC to analyze the sensitivity, then plots the significant PRCC values.
 
+### Parameter Change Script
+
+This script (parameterChangeScript.m) visualizes different parameter combinations on the HIV In Vitro model. By varying two parameters, `beta` and `q`, it explores different scenarios and visualizes the free virus population against time using the `plotParameterChanges` function.
+
+Notes:
+- Modify the `betaChange` and `qChange` arrays to explore different values.
+- The script assumes that the `plotParameterChanges` function and the necessary ODE-solving functions are defined and accessible.
+- Be aware of the defined original control parameters and ensure that they are consistent.
+
+Dependencies:
+- `plotParameterChanges` function
+- `validate_tstopearly` function (if used)
+- Necessary ODE-solving functions for your model (e.g., `restartODE`)
+
+Output:
+A figure that represents different scenarios based on the combinations of `beta` and `q`. The figure will include a semilogarithmic plot, a legend detailing the variations, and appropriate labels and title.
+
+
 ## Functions
 
 ### Plotting LHS Distributions
@@ -78,6 +96,24 @@ alpha = 0.05; % Significance level
 
 % Plot PPRC figure at time points of interest
 plotPRCCAcrossTime(prcc, sign, PRCCVar, timePoints, alpha);
+```
+
+### plotParameterChanges Function
+
+The `plotParameterChanges` function visualizes the variations of the specified parameters in the HIV In Vitro model. It takes a cell array of parameter sets and a cell array of parameter labels as inputs and plots the free virus against time for each parameter set on a semilog scale. A vertical dashed line represents the time of control introduction. The function also includes a legend detailing the parameter changes and a title.
+
+Inputs:
+1. **paramSets**: A cell array containing multiple parameter sets. Each element of the array is a struct defining a unique combination of parameters (e.g., beta, q, controlTime) for the simulation.
+2. **parameterLabels**: A cell array containing the labels of the parameters that are varied. This is used to construct the legend entries.
+
+Outputs:
+None. The function directly plots the figure.
+
+Usage:
+```matlab
+paramSets = {...}; % Define different parameter sets
+parameterLabels = {'beta', 'q', 'controlTime'};
+plotParameterChanges(paramSets, parameterLabels);
 ```
 
 ## Other Functions
