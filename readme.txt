@@ -43,7 +43,20 @@ Steps:
 4. Iterative Model Solving: Iterates through the runs, solves the model with new parameters at each iteration using the restartODE function, and extracts the outputs at the time points of interest.
 5. Saving and Analysis: Saves the workspace and calculates PRCC to analyze the sensitivity, then plots the significant PRCC values.
 
-### Other Functions
+## Functions
+
+### Plotting LHS Distributions
+
+A new function `plotLHS(PRCCVar, LHS_vars)` is included to visualize the distributions obtained through Latin Hypercube Sampling (LHS) for the parameters beta, q, and control time. It takes in the variables `PRCCVar` and `LHS_vars` and plots a combined histogram figure for the given samples, allowing for a more comprehensive overview of the parameters' distributions.
+
+Usage:
+```matlab
+PRCCVar = {'\beta','q','control t'};
+LHS_vars = {beta_LHS, q_LHS, controlTime_LHS};
+plotLHS(PRCCVar, LHS_vars);
+```
+
+## Other Functions
 
 - `LHS_Call.m`: Generates the Latin Hypercube Sampling matrix. 
 - `stopEvent.m`: Defines the condition to halt the ODE solver.
