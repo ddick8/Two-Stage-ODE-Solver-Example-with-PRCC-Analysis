@@ -40,19 +40,13 @@ parameters.Control.q = 1e-8;
 parameters.ControlTime = 3;
 parameters.FinalTime = 10;
 
+% Generating Latin Hypercube Sampling (LHS) matrices for beta, q, and control time parameters
+beta_LHS = LHS_Call(1e-2, parameters.Control.beta, parameters.Control.beta*100, parameters.Control.beta*1/100 ,runs,'unif');
+q_LHS = LHS_Call([], parameters.Control.q,, [], parameters.Control.q*1/10, [], runs, 'unif');
+controlTime_LHS = LHS_Call(0, [], parameters.FinalTime, [] ,runs,'unif');
+
 % Variable names for PRCC (Partial Rank Correlation Coefficient) analysis
 PRCCVar = {'\beta','q','control t'};
-
-% Generating Latin Hypercube Sampling (LHS) matrices for beta, q, and control time parameters
-beta_LHS = LHS_Call([], parameters.Control.beta, [], parameters.Control.beta/4, runs, 'norm');
-q_LHS = LHS_Call([], parameters.Control.q, [], parameters.Control.q/4, runs, 'norm');
-controlTime_LHS = LHS_Call(1, [], parameters.FinalTime, [] ,runs,'unif');
-
-% Cell array containing the variables
-LHS_vars = {beta_LHS, q_LHS, controlTime_LHS};
-
-%Plot histogram of the LHS distrabutions
-plotLHS(PRCCVar, LHS_vars);
 
 % Labels for compartments in the model
 var_label = {'T','I','V'};
