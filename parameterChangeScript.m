@@ -11,8 +11,8 @@ validate_tstopearly(parameters.ControlTime, parameters.FinalTime);
 paramterLabels = {'beta','q'};
 
 % Changed parameter list
-betaChange = [8e-4,8e-8,8e-16,0];
-qChange = [1,.5,.25,0];
+betaChange = [8e-4,8e-4*.5,0];
+qChange = [1,.5,0];
 
 %determine number of parameter sets
 n = length(betaChange);
