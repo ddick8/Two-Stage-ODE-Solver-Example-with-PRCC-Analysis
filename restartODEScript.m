@@ -34,6 +34,7 @@ validate_tstopearly(parameters.ControlTime, parameters.FinalTime);
 % Plot the solution of the ODE on a semilogarithmic scale.
 % This plot visualizes the populations of target cells, infectious cells,
 % and free virus over time.
+figure;
 p1 = semilogy(T,Y(:,1:3));
 
 %Incress line width

@@ -95,18 +95,7 @@ save Model_LHS.mat;
 % Calculate PRCC (Partial Rank Correlation Coefficient)
 alpha = 0.05; %Significance level
 
-[prcc, sign, sign_label]=PRCC_II(LHSmatrix,V_lhs,1:length(timePoints),PRCCVar ,alpha);
+[prcc, sign, sign_label] = PRCC_II(LHSmatrix, V_lhs, 1:length(timePoints), PRCCVar, alpha);
 
-% Loop through time points
-for r=1:length(timePoints)
-    % Find significant PRCCs at the current time point
-    a=find(sign(r,:)<alpha);
-    % Store significant PRCCs
-    sign_label.index{r}=a;
-    sign_label.label{r}=PRCCVar(a);
-    sign_label.value{r}=num2str(prcc(r,a));
-    
-    % Call the plotting function
-    plotPRCC(prcc(r,:), PRCCVar, timePoints(r),'PRCC Values for free virus')
-end
-
+% Plot the PRCC values across the different time points
+plotPRCCAcrossTime(prcc, sign, PRCCVar, timePoints, alpha)

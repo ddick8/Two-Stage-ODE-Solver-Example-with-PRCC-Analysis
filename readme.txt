@@ -56,6 +56,30 @@ LHS_vars = {beta_LHS, q_LHS, controlTime_LHS};
 plotLHS(PRCCVar, LHS_vars);
 ```
 
+### Plot PRCC Across Time Points
+
+- `plotPRCCAcrossTime(prcc, sign, PRCCVar, timePoints, alpha)` visualizes PRCC values across specific time points in a single figure.
+
+Inputs:
+- `prcc`: Matrix containing PRCC values for each time point.
+- `sign`: Matrix containing significance levels for each time point.
+- `PRCCVar`: Cell array containing names of the PRCC variables.
+- `timePoints`: Array containing the time points of interest.
+- `alpha`: Significance level for PRCC analysis.
+
+Outputs:
+- This function does not return values but produces a plot visualizing the PRCC values across the defined time points.
+
+Usage:
+```matlab
+% Calculate PRCC (Partial Rank Correlation Coefficient)
+alpha = 0.05; % Significance level
+[prcc, sign, sign_label] = PRCC_II(LHSmatrix, V_lhs, 1:length(timePoints), PRCCVar, alpha);
+
+% Plot PPRC figure at time points of interest
+plotPRCCAcrossTime(prcc, sign, PRCCVar, timePoints, alpha);
+```
+
 ## Other Functions
 
 - `LHS_Call.m`: Generates the Latin Hypercube Sampling matrix. 

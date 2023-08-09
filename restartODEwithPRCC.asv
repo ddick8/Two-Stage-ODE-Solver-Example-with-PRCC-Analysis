@@ -40,13 +40,19 @@ parameters.Control.q = 1e-8;
 parameters.ControlTime = 3;
 parameters.FinalTime = 10;
 
-% Generating Latin Hypercube Sampling (LHS) matrices for beta, q, and control time parameters
-beta_LHS = LHS_Call(1e-2, parameters.Control.beta, parameters.Control.beta*100, parameters.Control.beta*1/100 ,runs,'unif');
-q_LHS = LHS_Call([], parameters.Control.q,, [], parameters.Control.q*1/10, [], runs, 'unif');
-controlTime_LHS = LHS_Call(0, [], parameters.FinalTime, [] ,runs,'unif');
-
 % Variable names for PRCC (Partial Rank Correlation Coefficient) analysis
 PRCCVar = {'\beta','q','control t'};
+
+% Generating Latin Hypercube Sampling (LHS) matrices for beta, q, and control time parameters
+beta_LHS = LHS_Call([], parameters.Control.beta, [], parameters.Control.beta/4, runs, 'norm');
+q_LHS = LHS_Call([], parameters.Control.q, [], parameters.Control.q/4, runs, 'norm');
+controlTime_LHS = LHS_Call(1, [], parameters.FinalTime, [] ,runs,'unif');
+
+% Cell array containing the variables
+LHS_vars = {beta_LHS, q_LHS, controlTime_LHS};
+
+%Plot histogram of the LHS distrabutions
+plotLHS(PRCCVar, LHS_vars);
 
 % Labels for compartments in the model
 var_label = {'T','I','V'};
@@ -89,18 +95,38 @@ save Model_LHS.mat;
 % Calculate PRCC (Partial Rank Correlation Coefficient)
 alpha = 0.05; %Significance level
 
-[prcc, sign, sign_label]=PRCC_II(LHSmatrix,V_lhs,1:length(timePoints),PRCCVar ,alpha);
+[prcc, sign, sign_label] = PRCC_II(LHSmatrix, V_lhs, 1:length(timePoints), PRCCVar, alpha);
+
+% Create a new figure and specify its size
+figure('Position', [100, 100, 800, 800]); % [left bottom width height]
 
 % Loop through time points
-for r=1:length(timePoints)
+for r = 1:length(timePoints)
     % Find significant PRCCs at the current time point
-    a=find(sign(r,:)<alpha);
+    a = find(sign(r, :) < alpha);
     % Store significant PRCCs
-    sign_label.index{r}=a;
-    sign_label.label{r}=PRCCVar(a);
-    sign_label.value{r}=num2str(prcc(r,a));
+    sign_label.index{r} = a;
+    sign_label.label{r} = PRCCVar(a);
+    sign_label.value{r} = num2str(prcc(r, a));
     
-    % Call the plotting function
-    plotPRCC(prcc(r,:), PRCCVar, timePoints(r),'PRCC Values for free virus')
+    % Create a subplot for each time point
+    subplot(length(timePoints), 1, r);
+    
+    % Call the plotting function (which may need to be adapted for subplotting)
+    plotPRCC(prcc(r, :), PRCCVar, timePoints(r), 'PRCC Values for free virus',true);
 end
 
+% Add an overall title or other formatting if needed
+sgtitle('PRCC Values Across Different Time Points');
+
+% Add a common y-label
+ylabelPosition = get(gca, 'Position');
+yLabelX = ylabelPosition(1) - 0.05;
+yLabelY = .35;
+annotation('textbox', [yLabelX, yLabelY,.5, 0], ...
+    'String', 'PRCC Values for free virus', ...
+    'EdgeColor', 'none', ...
+    'Rotation', 90, ...
+    'FontSize', 14, ...      % Font size
+    'FontName', 'Arial', ... % Font name
+    'FontWeight', 'bold');   % Font weight
