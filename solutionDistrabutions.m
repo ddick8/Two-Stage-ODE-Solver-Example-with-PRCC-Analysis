@@ -1,6 +1,10 @@
-% Model Solution distrabutions
+%% Model Solution distrabutions
 
-timePoint = 3;
+%% Load solution data
+load('Model_LHS.mat');
+
+%% Set plot parameters
+timePoint = 2;
 data = V_lhs(timePoint,:);
 
 % Your list of variable names as strings in a cell array
@@ -41,18 +45,18 @@ disp(statsTable);
 
 %% Visualizations
 
-% Gather the data from each vector into a cell array
-data = cell(size(list));
-for i = 1:length(list)
-    data{i} = eval(list{i}); % Extract each dataset using eval
-end
-
-% Convert the cell array to a matrix for boxplot
-dataMatrix = cell2mat(data');
-
-% Create a boxplot
-figure()
-boxplot(dataMatrix);
+% % % Gather the data from each vector into a cell array
+% % data = cell(size(list));
+% % for i = 1:length(list)
+% %     data{i} = eval(list{i}); % Extract each dataset using eval
+% % end
+% % 
+% % % Convert the cell array to a matrix for boxplot
+% % dataMatrix = cell2mat(data');
+% % 
+% % % Create a boxplot
+% % figure()
+% % boxplot(dataMatrix);
 
 
 % histogram
