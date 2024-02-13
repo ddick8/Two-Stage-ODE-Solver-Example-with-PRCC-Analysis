@@ -4,6 +4,9 @@
 load('Model_LHS.mat');
 
 %% Set plot parameters
+
+% timePoint is the index of the saved time point.
+% 1,2, or 3 in this example.
 timePoint = 2;
 data = V_lhs(timePoint,:);
 
