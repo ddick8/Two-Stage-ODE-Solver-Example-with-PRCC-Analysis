@@ -70,13 +70,38 @@ for i = 1:length(list)
 
     figure()
     hist(data(timePoint,:),20)
-    title(['Distribution Histogram for solution time point',num2str(timePoint)]);
+    title(['Distribution Histogram for solution at saved point',num2str(timePoint)]);
     xlabel(list{i});
     ylabel('Count');
 end
 
+%% Create a figure with subplots using nexttile
+numVariables = length(list);
+numRows = ceil(sqrt(numVariables));  % Determine the number of rows for subplots
+numCols = ceil(numVariables / numRows);  % Determine the number of columns for subplots
+figure;
 
-% % Kernel density plot
+% Loop over the list of variables
+for i = 1:numVariables
+
+    % Get the plot data using eval 
+    data = eval(list{i});
+    
+    % Create subplot using nexttile
+    nexttile;
+    
+    % Plot histogram
+    hist(data(timePoint,:), 20);
+
+    % Set labels
+    xlabel(list{i});
+    ylabel('Count');
+end
+
+% Overall title
+sgtitle(["Histograms of Variables at Solution Point ", num2str(timePoint)]);
+
+%% Kernel density plot
 % % Calculate the kernel density estimate
 % [f,xi] = ksdensity(data(timePoint,:));
 % 
